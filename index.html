@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Christmas cake and pudding feeding schedule generator (Stir-up Sunday)</title>
+<meta name="description" content="Free one-file Christmas cake and pudding schedule. Pick your bake day, how often to feed and your icing day; get dated feeds, marzipan, icing and Christmas Day steaming. Nothing saved or sent.">
+<style>
+:root{--red:#B91C1C;--green:#166534;--ink:#1F2937;--line:#D1D5DB;--bg:#FFFBEB}
+*{box-sizing:border-box}
+body{font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:1rem}
+.w{max-width:46rem;margin:0 auto}
+h1{font-size:1.6rem;margin:.2rem 0 .4rem;color:var(--red)}
+h2{font-size:1.15rem;margin:0 0 .5rem}
+.card{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.8rem}
+label.f{display:block;font-weight:600;margin-bottom:.2rem}
+input[type=date],select,input[type=number]{font:inherit;border:1.5px solid var(--line);border-radius:8px;padding:.45rem .55rem;width:100%;background:#fff}
+button{font:inherit;font-weight:700;background:var(--green);color:#fff;border:0;border-radius:8px;padding:.6rem 1rem;cursor:pointer}
+table{border-collapse:collapse;width:100%}
+th,td{padding:.45rem .3rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+td.d{white-space:nowrap;font-weight:700;width:7.5rem}
+.tick{display:inline-block;width:1.1rem;height:1.1rem;border:1.5px solid #6B7280;border-radius:3px}
+.warn{background:#FEF3C7;border-left:6px solid #D97706;border-radius:8px;padding:.6rem .8rem;margin:.6rem 0}
+.muted{color:#6B7280;font-size:.9rem}
+@media print{button,.noprint{display:none!important}body{background:#fff}.card{border:0;padding:0}}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>Christmas cake and pudding schedule</h1>
+<p>Pick the day you bake and get a dated list: feeding days, the last feed, marzipan, icing and steaming the pudding on Christmas Day. Stir-up Sunday (the last Sunday before Advent) is filled in for you. Nothing is saved or sent anywhere.</p>
+<p id="info" class="muted"></p>
+
+<div class="card">
+ <h2>Your dates</h2>
+ <div class="grid">
+  <div><label class="f" for="bake">Christmas cake: bake on</label><input type="date" id="bake"></div>
+  <div><label class="f" for="pud">Christmas pudding: make on</label><input type="date" id="pud"></div>
+  <div><label class="f" for="freq">Feed every</label><select id="freq"><option value="7" selected>week</option><option value="14">fortnight</option></select></div>
+  <div><label class="f" for="ice">Ice the cake on</label><select id="ice"></select></div>
+ </div>
+ <p style="margin:.8rem 0 0"><label><input type="checkbox" id="alc"> My pudding is alcohol-free (no feeding)</label></p>
+</div>
+
+<div id="err" class="warn" hidden></div>
+
+<div class="card">
+ <h2>Your schedule</h2>
+ <table><thead><tr><th>Date</th><th>Job</th><th class="noprint">Done</th></tr></thead><tbody id="rows"></tbody></table>
+ <p class="noprint"><button id="print" type="button">Print this schedule</button></p>
+</div>
+
+<p class="muted">Rules used: feed with 1 to 2 tablespoons of brandy, rum, sherry or fruit juice; stop feeding the cake 6 days before marzipan (our suggestion, so the top dries); marzipan 2 days before icing (our suggestion); stop feeding the pudding on 18 December (our suggestion); steam the pudding at least 2 hours on Christmas Day until it is 70C in the centre. These are sensible defaults, not a recipe: follow your own recipe where it differs. Alcohol-free puddings have no spirit to preserve them, so use within about four to six weeks or freeze.</p>
+</div>
+<script>
+(function(){
+function $(i){return document.getElementById(i);}
+var MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function iso(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(x<10?"0":"")+x;}
+function pd(s){var a=s.split("-");return new Date(+a[0],+a[1]-1,+a[2]);}
+function fmt(d){return DN[d.getDay()]+" "+d.getDate()+" "+MN[d.getMonth()];}
+function add(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);}
+var now=new Date(),T=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+var Y=T>new Date(T.getFullYear(),11,25)?T.getFullYear()+1:T.getFullYear();
+// Advent Sunday = the Sunday nearest 30 Nov; Stir-up Sunday = the Sunday before it.
+var n30=new Date(Y,10,30),off=n30.getDay()<=3?-n30.getDay():7-n30.getDay();
+var advent=add(n30,off),stir=add(advent,-7),xm=new Date(Y,11,25);
+$("info").innerHTML="For "+Y+": Stir-up Sunday is <strong>"+fmt(stir)+"</strong>, Advent Sunday <strong>"+fmt(advent)+"</strong>, Christmas Day <strong>"+fmt(xm)+"</strong>.";
+$("bake").value=iso(stir);$("pud").value=iso(stir);
+var opts="";[-5,-4,-3,-2].forEach(function(o,i){var d=add(xm,o);opts+='<option value="'+iso(d)+'"'+(o===-4?" selected":"")+'>'+fmt(d)+'</option>';});
+$("ice").innerHTML=opts;
+function row(d,t){return '<tr><td class="d">'+fmt(d)+'</td><td>'+t+'</td><td class="noprint"><span class="tick"></span></td></tr>';}
+function run(){
+ var bake=$("bake").value,pud=$("pud").value,step=+$("freq").value,alc=$("alc").checked,ev=[],warn=[];
+ var iceD=pd($("ice").value),marz=add(iceD,-2),lastC=add(marz,-6),stopP=new Date(Y,11,18);
+ if(bake){var b=pd(bake);ev.push([b,"<strong>Bake the Christmas cake</strong>. Cool it, then wrap it."]);
+  var f=add(b,step),c=0;
+  while(f<=lastC){ev.push([f,"Feed the cake: 1 to 2 tablespoons of brandy, rum, sherry or fruit juice over the top."+(add(f,step)>lastC?" <em>Last feed.</em>":"")]);f=add(f,step);c++;}
+  if(!c)warn.push("Your cake bake date leaves no time for a feed before marzipan. Still bake it; you can skip feeding.");
+  if(b>marz)warn.push("Your cake bake date is after the marzipan date. Move the icing date later or bake earlier.");
+ }
+ ev.push([marz,"<strong>Marzipan the cake</strong> (apricot jam first). Leave it to dry for two days."]);
+ ev.push([iceD,"<strong>Ice the cake</strong>."]);
+ if(pud){var p=pd(pud);ev.push([p,"<strong>Make the Christmas pudding</strong>, steam it as the recipe says, then store it somewhere cool and dry."+(alc?" Alcohol-free: use within about four to six weeks, or freeze it.":"")]);
+  if(!alc){var g=add(p,step);while(g<=stopP){ev.push([g,"Feed the pudding: 1 to 2 tablespoons of brandy, rum or sherry, then rewrap in fresh greaseproof paper and foil."+(add(g,step)>stopP?" <em>Last feed.</em>":"")]);g=add(g,step);}}
+ }
+ ev.push([xm,"<strong>Christmas Day:</strong> steam the pudding for at least 2 hours until piping hot (70C in the centre). Reheat once only."]);
+ ev.sort(function(a,b){return a[0]-b[0];});
+ var h="";ev.forEach(function(e){h+=row(e[0],e[1]);});$("rows").innerHTML=h;
+ var w=$("err");if(warn.length){w.hidden=false;w.textContent=warn.join(" ");}else{w.hidden=true;}
+}
+["bake","pud","freq","ice","alc"].forEach(function(i){$(i).addEventListener("change",run);});
+$("print").onclick=function(){window.print();};
+run();
+})();
+</script>
+</body>
+</html>
