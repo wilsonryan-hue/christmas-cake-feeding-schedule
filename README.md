@@ -4,6 +4,8 @@ Pick the day you bake your Christmas cake and make your pudding, how often you f
 
 **Use it now, no install:** download `index.html` and open it in any browser, or use the page version with FAQs at [tchworks.co.uk/free/stir-up-sunday-2026-christmas-cake-pudding-schedule](https://www.tchworks.co.uk/free/stir-up-sunday-2026-christmas-cake-pudding-schedule/?utm_source=github&utm_medium=repo&utm_campaign=cake-schedule-repo).
 
+**Free printable PDF (no install):** [Download the A4 pack](https://github.com/wilsonryan-hue/christmas-cake-feeding-schedule/releases/download/v1.0.0-free-printable/christmas-cake-pudding-schedule-2026-free.pdf) — Stir-up Sunday 2026 weekly + fortnightly + alcohol-free pudding schedules, plus a blank custom sheet ([release notes](https://github.com/wilsonryan-hue/christmas-cake-feeding-schedule/releases/tag/v1.0.0-free-printable)).
+
 ## The rules it uses
 
 - Stir-up Sunday is the Sunday before Advent Sunday; Advent Sunday is the Sunday nearest 30 November. The page shows the dates for the current Christmas (21 Nov 2027, 26 Nov 2028 and so on follow the same rule).
