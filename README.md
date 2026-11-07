@@ -28,3 +28,7 @@ Sensible defaults, not a recipe: follow your own recipe where it differs. An alc
 ## Licence
 
 MIT. Made by [TCH Works](https://www.tchworks.co.uk/?utm_source=github&utm_medium=repo&utm_campaign=cake-schedule-repo), which also publishes free [Advent calendar activities](https://www.tchworks.co.uk/free/advent-calendar-activities-2026/?utm_source=github&utm_medium=repo&utm_campaign=cake-schedule-repo), [more free Christmas tools](https://www.tchworks.co.uk/free/?utm_source=github&utm_medium=repo&utm_campaign=cake-schedule-repo), [Christmas cards](https://www.tchworks.co.uk/cards/christmas/?utm_source=github&utm_medium=repo&utm_campaign=cake-schedule-repo) and a printable [Christmas Budget & Gift Planner](https://tchworks.gumroad.com/l/kazjns?utm_source=github&utm_medium=repo&utm_campaign=cake-schedule-repo).
+
+## Also on Gumroad
+
+Get the same free PDF with instant download on Gumroad: https://tchworks.gumroad.com/l/utinki
